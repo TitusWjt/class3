@@ -1,0 +1,56 @@
+#General
+seed: 4
+workers: 8
+missing_rate: 0
+device: '0'
+dataset_dir: "./datasets"
+dataset_name: Scene-15   #Caltech101-20 Scene-15 LandUse-21 BDGP
+
+
+
+#Model
+model_kwargs:
+  Autoencoder1:
+    decoder_arch: [20, 128, 2048, 512, 512, 1024, 1024, 1984]  #(1984,512,20),(20,59,15),(59,40,21)
+    encoder:
+      projector_arch: [1984, 1024, 1024]
+      denoising_arch: [1024, 512, 512, 2048, 128]
+      cluster_head: [128,20]
+    activation: Ture
+    function: relu  #sigmoid leakyrelu tanh relu
+    batchnorm: True
+
+  Autoencoder2:
+    decoder_arch: [ 20, 128, 2048, 512, 512, 1024, 1024, 512]
+    encoder:
+      projector_arch: [512, 1024]
+      denoising_arch: [ 1024, 512, 512, 2048, 128]
+      cluster_head: [128,20]
+    activation: Ture
+    function: relu  #sigmoid leakyrelu tanh relu
+    batchnorm: True
+
+
+
+
+
+#Pretrain
+first_stage:
+  p_epoch: 500
+  p_batch_size: 256
+  p_lr: 1.0e-4
+  p_gamma: 9
+  p_interval: 10
+  a1_pretrain_path: ./weight/Autoencoder1_pretrained_model.pkl
+  a2_pre train_path: ./weight/Autoencoder2_pretrained_model.pkl
+
+
+#Robust Learning
+second_stage:
+  r_threshold: 2
+  r_lr: 0.01
+  r_momentum: 0.9
+  r_weight_decay: 0.0005
+  r_epoch: 1000
+  r_bacth_size: 256
+
