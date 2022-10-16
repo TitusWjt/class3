@@ -6,7 +6,7 @@ import torchvision
 import random
 import argparse
 import copy
-
+from torch.utils.data import Dataset
 from data.dataloader.dataloader import load_data
 from utils.yaml_config_hook import yaml_config_hook
 
@@ -27,6 +27,17 @@ def main():
 
     #Load dataset
     dataset, dims, view, data_size, class_num = load_data(args.dataset_name)
+    data_loader = torch.utils.data.DataLoader(
+        dataset,
+        batch_size=args.batch_size,
+        shuffle=True,
+        drop_last=True,
+    )
+
+    model = Network(view, dims, args.feature_dim, args.high_feature_dim, class_num, device)
+
+
+
 
     X_list, Y_list = load_data(args.dataset_name)
     x1_train_raw = X_list[0]
