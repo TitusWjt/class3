@@ -21,10 +21,7 @@ class Scene(Dataset):
         return 2100
 
     def __getitem__(self, idx):
-        # if self.view == 2:
-        #     return [torch.from_numpy(
-        #         self.view1[idx]), torch.from_numpy(self.view2[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(np.array(idx)).long()
 
-        return [torch.from_numpy(self.view1[idx]), torch.from_numpy(
-            self.view2[idx]), torch.from_numpy(self.view3[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(
+        return [torch.Tensor(self.view1[idx]), torch.Tensor(
+            self.view2[idx]), torch.Tensor(self.view3[idx])], torch.Tensor(self.labels[idx]), torch.Tensor(
             np.array(idx)).long()

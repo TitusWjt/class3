@@ -7,8 +7,11 @@ import random
 import argparse
 import copy
 from torch.utils.data import Dataset
+
+from core.loss import Loss
 from data.dataloader.dataloader import load_data
 from model.autoencoder import Autoencoder
+from script.pretrain import pretrain
 from utils.yaml_config_hook import yaml_config_hook
 
 
@@ -50,6 +53,11 @@ def main():
         itertools.chain(autoencoder.encoders.parameters(), autoencoder.decoders.parameters(),),
         lr=args.learning_rate)
     autoencoder = autoencoder.to_device(device)
+    criterion = Loss(args.batch_size, device).to(device)
+
+    if args.isPretrain:
+        pretrain(args.Pretrain_p, data_loader, view, optimizer, device)
+
 
 
 
