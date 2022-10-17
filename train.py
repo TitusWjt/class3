@@ -8,7 +8,10 @@ import argparse
 import copy
 from torch.utils.data import Dataset
 from data.dataloader.dataloader import load_data
+from model.autoencoder import Autoencoder
 from utils.yaml_config_hook import yaml_config_hook
+
+
 
 
 def main():
@@ -25,6 +28,13 @@ def main():
     use_cuda = torch.cuda.is_available()
     device = torch.device('cuda:0' if use_cuda else 'cpu')
 
+    # Set random seeds
+    np.random.seed(args.seed)
+    random.seed(args.seed + 1)
+    torch.manual_seed(args.seed + 2)
+    torch.cuda.manual_seed(args.seed + 3)
+    torch.backends.cudnn.deterministic = True
+
     #Load dataset
     dataset, dims, view, data_size, class_num = load_data(args.dataset_name)
     data_loader = torch.utils.data.DataLoader(
@@ -34,10 +44,16 @@ def main():
         drop_last=True,
     )
 
-    model = Network(view, dims, args.feature_dim, args.high_feature_dim, class_num, device)
+
+    autoencoder = Autoencoder(args.model_kwargs, view, dims, class_num)
+    optimizer = torch.optim.Adam(
+        itertools.chain(autoencoder.encoders.parameters(), autoencoder.decoders.parameters(),),
+        lr=args.learning_rate)
+    autoencoder = autoencoder.to_device(device)
 
 
 
+    pass
 
     X_list, Y_list = load_data(args.dataset_name)
     x1_train_raw = X_list[0]
