@@ -1,7 +1,6 @@
 from model.encoder import Encoder
 from model.decoder import Decoder
 import torch
-from core.evaulate import valid
 import torch.nn as nn
 
 class Autoencoder(nn.Module):
@@ -43,22 +42,4 @@ class Autoencoder(nn.Module):
             self.encoders[v].to(device)
             self.decoders[v].to(device)
 
-    def pretrain(self, model, Pretrain_p, data_loader, view, optimizer, device):
-        tot_loss = 0.
-        criterion = torch.nn.MSELoss()
-        for batch_idx, (xs, y, idx) in enumerate(data_loader):
-            for v in range(view):
-                xs[v] = xs[v].to(device)
-            optimizer.zero_grad()
-            zs, rs = model(xs)
-            loss_list = []
-            for v in range(view):
-                loss_list.append(criterion(xs[v], rs[v]))
-                for w in range(v + 1, view):
-                    loss_list.append(criterion.forward_iic(zs[v], zs[w]))
-            loss = sum(loss_list)
-            loss.backward()
-            optimizer.step()
-            tot_loss += loss.item()
-        print('Epoch {}'.format(Pretrain_p['p_epoch']), 'Loss:{:.6f}'.format(tot_loss / len(data_loader)))
-        acc, nmi, pur = valid(model, device, dataset, view, data_size, class_num, eval_h=False)
+

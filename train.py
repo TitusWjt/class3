@@ -12,9 +12,7 @@ from core.loss import Loss
 from data.dataloader.dataloader import load_data
 from model.autoencoder import Autoencoder
 from script.pretrain import pretrain
-from utils.yaml_config_hook import yaml_config_hook
-
-
+from utils import yaml_config_hook
 
 
 def main():
@@ -56,8 +54,8 @@ def main():
     criterion = Loss(args.batch_size, device).to(device)
 
     if args.isPretrain:
-        pretrain(autoencoder,args.Pretrain_p, data_loader, criterion, view, optimizer, device)
-
+        pretrain(autoencoder, args.Pretrain_p, dataset, data_loader, criterion, view, optimizer, data_size, class_num, device)
+        autoencoder.load_state_dict(torch.load(args.Pretrain_p['pretrain_path']))
 
 
 

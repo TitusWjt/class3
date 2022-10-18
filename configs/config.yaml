@@ -27,8 +27,8 @@ model_kwargs:
 isPretrain: Ture
 Pretrain_p:
   p_epoch: 50
-  a1_pretrain_path: ./weight/Autoencoder1_pretrained_model.pkl
-  a2_pre train_path: ./weight/Autoencoder2_pretrained_model.pkl
+  p_interval: 1
+  pretrain_path: ./checkpoints/Scene-15_model.pkl  #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
 
 
 #Robust Learning
