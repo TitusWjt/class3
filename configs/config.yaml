@@ -4,7 +4,7 @@ workers: 8
 missing_rate: 0
 device: '0'
 dataset_dir: "./datasets"
-dataset_name: Caltech101-20  #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
+dataset_name: Scene-15  #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
 batch_size: 256
 learning_rate: 0.0001
 
@@ -23,15 +23,10 @@ model_kwargs:
     batchnorm: True
 
 
-
 #Pretrain
 isPretrain: Ture
 Pretrain_p:
-  p_epoch: 500
-  p_batch_size: 256
-  p_lr: 1.0e-4
-  p_gamma: 9
-  p_interval: 10
+  p_epoch: 50
   a1_pretrain_path: ./weight/Autoencoder1_pretrained_model.pkl
   a2_pre train_path: ./weight/Autoencoder2_pretrained_model.pkl
 

@@ -15,13 +15,13 @@ class Scene(Dataset):
         self.view1 = X[0].astype('float32')  #(4485,20)
         self.view2 = X[1].astype('float32')  #(4485,59)
         self.view3 = X[2].astype('float32')  #(4485,40)                               #(4485,40)
-        self.labels = np.squeeze(data['Y']).astype('int') #(4485,)
+        #self.labels = np.squeeze(data['Y']).astype('int') #(4485,)
+        self.labels = np.squeeze(data['Y']).reshape(len(np.squeeze(data['Y']).astype('int')), -1).astype('int')
 
     def __len__(self):
-        return 2100
+        return 4485
 
     def __getitem__(self, idx):
-
-        return [torch.Tensor(self.view1[idx]), torch.Tensor(
-            self.view2[idx]), torch.Tensor(self.view3[idx])], torch.Tensor(self.labels[idx]), torch.Tensor(
+        return [torch.from_numpy(self.view1[idx]), torch.from_numpy(
+            self.view2[idx]), torch.from_numpy(self.view3[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(
             np.array(idx)).long()

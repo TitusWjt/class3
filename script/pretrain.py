@@ -1,34 +1,23 @@
-import itertools
-import os
-import numpy as np
 import torch
-import torchvision
-import random
-import argparse
-import copy
+
+from core.evaulate import valid
 
 
-
-
-def pretrain(Pretrain_p, data_loader, view, optimizer, device):
+def pretrain(model, Pretrain_p, data_loader, criterion, view, optimizer, device):
     tot_loss = 0.
-    criterion = torch.nn.MSELoss()
     for batch_idx, (xs, y, idx) in enumerate(data_loader):
         for v in range(view):
             xs[v] = xs[v].to(device)
         optimizer.zero_grad()
-        _, _, xrs, zs = model(xs)
+        zs, rs = model(xs)
         loss_list = []
         for v in range(view):
+            loss_list.append(criterion.mse(xs[v], rs[v]))
             for w in range(v+1, view):
-                loss_list.append(
-                    0.0001 * crossview_contrastive_Loss(torch.softmax(zs[v], dim=0), torch.softmax(zs[w], dim=0)))
-            loss_list.append(criterion(xs[v], xrs[v]))
-        for v in range(view):
-            loss_list.append(criterion(xs[v], xrs[v]))
-
+                loss_list.append(0.001*criterion.forward_iic(zs[v], zs[w]))
         loss = sum(loss_list)
         loss.backward()
         optimizer.step()
         tot_loss += loss.item()
-    print('Epoch {}'.format(epoch), 'Loss:{:.6f}'.format(tot_loss / len(data_loader)))
+    print('Epoch {}'.format(Pretrain_p['p_epoch']), 'Loss:{:.6f}'.format(tot_loss / len(data_loader)))
+    acc, nmi, pur = valid(model, device, dataset, view, data_size, class_num, eval_h=False)

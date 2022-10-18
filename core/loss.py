@@ -11,7 +11,8 @@ class Loss(nn.Module):
 
         self.mask = self.mask_correlated_samples(batch_size)
         self.similarity = nn.CosineSimilarity(dim=2)
-        self.criterion = nn.CrossEntropyLoss(reduction="sum")
+        self.crossentropy = nn.CrossEntropyLoss(reduction="sum")
+        self.mse = torch.nn.MSELoss()
 
     def mask_correlated_samples(self, N):
         mask = torch.ones((N, N))
@@ -22,7 +23,7 @@ class Loss(nn.Module):
         mask = mask.bool()
         return mask
 
-    def compute_joint(view1, view2):
+    def compute_joint(self, view1, view2):
         """Compute the joint probability matrix P"""
 
         bn, k = view1.size()
@@ -32,7 +33,6 @@ class Loss(nn.Module):
         p_i_j = p_i_j.sum(dim=0)
         p_i_j = (p_i_j + p_i_j.t()) / 2.  # symmetrise
         p_i_j = p_i_j / p_i_j.sum()  # normalise
-
         return p_i_j
 
     def forward_iic(self, view1, view2, lamb=9.0, EPS=sys.float_info.epsilon):

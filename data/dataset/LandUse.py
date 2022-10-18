@@ -19,15 +19,11 @@ class LandUse(Dataset):
         self.view1 = train_x[0][index]
         self.view2 = train_x[1][index]
         self.view3 = train_x[2][index]
-        self.labels = np.squeeze(data['Y']).astype('int')[index] # (2100,40)
+        self.labels = np.squeeze(data['Y']).reshape(len(data['Y']),-1).astype('int')[index] # (2100,40)
 
     def __len__(self):
         return 2100
 
     def __getitem__(self, idx):
-        # if self.view == 2:
-        #     return [torch.from_numpy(
-        #         self.view1[idx]), torch.from_numpy(self.view2[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(np.array(idx)).long()
-
         return [torch.from_numpy(self.view1[idx]), torch.from_numpy(
             self.view2[idx]), torch.from_numpy(self.view3[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(np.array(idx)).long()

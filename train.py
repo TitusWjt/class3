@@ -52,11 +52,11 @@ def main():
     optimizer = torch.optim.Adam(
         itertools.chain(autoencoder.encoders.parameters(), autoencoder.decoders.parameters(),),
         lr=args.learning_rate)
-    autoencoder = autoencoder.to_device(device)
+    autoencoder.to_device(device)
     criterion = Loss(args.batch_size, device).to(device)
 
     if args.isPretrain:
-        pretrain(args.Pretrain_p, data_loader, view, optimizer, device)
+        pretrain(autoencoder,args.Pretrain_p, data_loader, criterion, view, optimizer, device)
 
 
 
