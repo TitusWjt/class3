@@ -4,7 +4,7 @@ workers: 8
 missing_rate: 0
 device: '0'
 dataset_dir: "./datasets"
-dataset_name: Scene-15  #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
+dataset_name: Fashion #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
 batch_size: 256
 learning_rate: 0.0001
 
@@ -26,7 +26,7 @@ model_kwargs:
 #Pretrain
 isPretrain: Ture
 Pretrain_p:
-  p_epoch: 50
+  p_epoch: 1
   p_interval: 1
   pretrain_path: ./checkpoints/Scene-15_model.pkl  #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
 

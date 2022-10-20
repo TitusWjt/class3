@@ -29,9 +29,8 @@ def pretrain(model, Pretrain_p, dataset, data_loader, criterion, view, optimizer
                      "===> IIC loss = {:.4e} ===> Total Loss = {:.4e}" \
                 .format((epoch + 1), Pretrain_p['p_interval'], loss_rec, loss_iic, loss_tot)
             print(output)
-            scores = evaluation(Pretrain_p, model, dataset, view, data_size, class_num, device)
-
-
+        scores = evaluation(Pretrain_p, model, dataset, view, data_size, class_num, device)
+    torch.save(model.state_dict(), Pretrain_p['pretrain_path'])
 
 
 
