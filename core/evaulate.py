@@ -62,24 +62,39 @@ def evaluation(Pretrain_p, model, dataset, view, data_size, class_num, device):
             Zs[v] = np.array(Zs[v])
             Rs[v] = np.array(Rs[v])
 
+        # print("Clustering results on common features of each view:")
+        # for v in range(view):
+        #     kmeans = KMeans(n_clusters=class_num, n_init=100)
+        #     y_pred = kmeans.fit_predict(Zs[v])
+        #
+        #     scores = vaild(labels_vector, y_pred)
+        #     print('ACC{} = {:.4f} NMI{} = {:.4f} ARI{} = {:.4f} PUR{}={:.4f}'.format(v + 1, scores['acc'],
+        #                                                                              v + 1, scores['nmi'],
+        #                                                                              v + 1, scores['ari'],
+        #                                                                              v + 1, scores['pur']))
         print("Clustering results on common features of each view:")
+        scores_each = []
         for v in range(view):
-            kmeans = KMeans(n_clusters=class_num, n_init=100)
-            y_pred = kmeans.fit_predict(Zs[v])
+            scores_each.append([])
+            scores = evaluate([Zs[v]], labels_vector)
+            print('ACC{} = {:.4f} NMI{} = {:.4f} ARI{} = {:.4f} PUR{}={:.4f}'.format(v + 1, scores['kmeans']['accuracy'],
+                                                                                     v + 1, scores['kmeans']['NMI'],
+                                                                                     v + 1, scores['kmeans']['ARI'],
+                                                                                     v + 1, scores['kmeans']['pur']))
+            scores_each[v].append(scores['kmeans']['accuracy'])
+            scores_each[v].append(scores['kmeans']['NMI'])
+            scores_each[v].append(scores['kmeans']['ARI'])
+            scores_each[v].append(scores['kmeans']['pur'])
 
-            scores = vaild(labels_vector, y_pred)
-            print('ACC{} = {:.4f} NMI{} = {:.4f} ARI{} = {:.4f} PUR{}={:.4f}'.format(v + 1, scores['acc'],
-                                                                                     v + 1, scores['nmi'],
-                                                                                     v + 1, scores['ari'],
-                                                                                     v + 1, scores['pur']))
+
         print("Clustering results on common features of all view:")
         latent_fusion = np.concatenate(Zs,axis=1)
         scores_tot = evaluate([latent_fusion], labels_vector)
-        print('ACC = {:.4f} NMI = {:.4f} ARI = {:.4f} PUR={:.4f}'.format( scores_tot['accuracy'],
-                                                                          scores_tot['NMI'],
-                                                                          scores_tot['ARI'],
-                                                                          scores_tot['pur']))
+        print('ACC = {:.4f} NMI = {:.4f} ARI = {:.4f} PUR={:.4f}'.format( scores_tot['kmeans']['accuracy'],
+                                                                          scores_tot['kmeans']['NMI'],
+                                                                          scores_tot['kmeans']['ARI'],
+                                                                          scores_tot['kmeans']['pur']))
 
+    return scores_each, scores_tot
 
-    return scores
 
