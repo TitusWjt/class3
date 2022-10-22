@@ -15,7 +15,7 @@ class Caltech(Dataset):
         self.view4 = normalize(X[3]).astype('float32') #(2386,1984)
         self.view5 = normalize(X[4]).astype('float32') #(2386,512)
         self.view6 = normalize(X[5]).astype('float32') #(2386,928)
-        self.labels = np.squeeze(data['Y']).astype('int')  #(2386,)
+        self.labels = np.squeeze(data['Y']).astype('int').reshape(((len(data['Y'])), -1))  #(2386,)
 
     def __len__(self):
         return 2386
@@ -25,6 +25,6 @@ class Caltech(Dataset):
         #     return [torch.from_numpy(
         #         self.view1[idx]), torch.from_numpy(self.view2[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(np.array(idx)).long()
 
-        return [torch.from_numpy(self.view1[idx]), torch.from_numpy(
-            self.view2[idx]), torch.from_numpy(self.view3[idx]), torch.from_numpy(
-            self.view4[idx]), torch.from_numpy(self.view5[idx]), torch.from_numpy(self.view6[idx])], torch.from_numpy(self.labels[idx]), torch.from_numpy(np.array(idx)).long()
+        return [torch.Tensor(self.view1[idx]), torch.Tensor(
+            self.view2[idx]), torch.Tensor(self.view3[idx]), torch.Tensor(
+            self.view4[idx]), torch.Tensor(self.view5[idx]), torch.Tensor(self.view6[idx])], torch.Tensor(self.labels[idx]), torch.Tensor(np.array(idx)).long()

@@ -12,9 +12,9 @@ class LandUse(Dataset):
     def __init__(self, path):
         data = scipy.io.loadmat(path+'LandUse-21.mat')
         train_x = []
-        train_x.append(sparse.csr_matrix(data['X'][0, 0]).A)  # (2100,20)
-        train_x.append(sparse.csr_matrix(data['X'][0, 1]).A)  # (2100,59)
-        train_x.append(sparse.csr_matrix(data['X'][0, 2]).A)  # (2100,40)
+        train_x.append(sparse.csr_matrix(data['X'][0, 0]).A.astype('float32'))  # (2100,20)
+        train_x.append(sparse.csr_matrix(data['X'][0, 1]).A.astype('float32'))  # (2100,59)
+        train_x.append(sparse.csr_matrix(data['X'][0, 2]).A.astype('float32'))  # (2100,40)
         index = random.sample(range(train_x[0].shape[0]), 2100) #相当于打乱顺序
         self.view1 = train_x[0][index]
         self.view2 = train_x[1][index]
