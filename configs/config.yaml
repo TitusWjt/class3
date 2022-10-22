@@ -4,7 +4,7 @@ workers: 8
 missing_rate: 0
 device: '0'
 dataset_dir: "./datasets"
-dataset_name: Fashion #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
+dataset_name: Scene-15 #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
 batch_size: 256
 learning_rate: 0.0001
 
@@ -12,12 +12,12 @@ learning_rate: 0.0001
 #Model
 model_kwargs:
   Encoder:
-    arch: [500, 2000, 128]
+    arch: [500, 2000, 1000, 128]
     activation: Ture
     function: relu  #sigmoid leakyrelu tanh relu
     batchnorm: True
   Decoder:
-    arch: [128, 2000, 500]
+    arch: [128, 1000, 2000, 500]
     activation: Ture
     function: relu  #sigmoid leakyrelu tanh relu
     batchnorm: True
@@ -26,8 +26,8 @@ model_kwargs:
 #Pretrain
 isPretrain: Ture
 Pretrain_p:
-  p_epoch: 2
-  p_interval: 1
+  p_epoch: 200
+  p_interval: 200
   pretrain_path: ./checkpoints/Scene-15_model.pkl  #Caltech101-20 Scene-15 LandUse-21 BDGP Fashion
   pretrain_save: ./runs/Scene-15.xls
 
